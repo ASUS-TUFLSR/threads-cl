@@ -1,8 +1,11 @@
+import { Button } from '@chakra-ui/react'
 import React from 'react'
 
 const App = () => {
   return (
-    <div>App</div>
+    <>
+     <Button>Hello</Button>
+    </>
   )
 }
 
