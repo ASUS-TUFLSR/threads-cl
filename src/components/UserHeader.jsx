@@ -1,5 +1,7 @@
-import { Avatar, Box, Flex, Text, VStack } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Link, Text, VStack } from '@chakra-ui/react'
+import {BsInstagram} from "react-icons/bs"
 import React from 'react'
+import { CgMoreO } from 'react-icons/cg'
 
 const UserHeader = () => {
   return (
@@ -24,8 +26,19 @@ const UserHeader = () => {
         </Flex>
         <Text>Co-founder, executive chairman and CEO of Meta Platforms.</Text>
         <Flex w={"full"} justifyContent={"space-between"}>
-            <Flex gap={2} alignItems={"center"} ></Flex>
-            <Flex></Flex>
+            <Flex gap={2} alignItems={"center"} >
+                <Text color={"gray.light"} >3.2K followers</Text>
+                <Box width="1" height="1" bg={"gray.light"} borderRadius={"full"} ></Box>
+                <Link color={"gray.light"} >instagram.com</Link>
+            </Flex>
+            <Flex>
+                <Box className='icon-container' >
+                    <BsInstagram size={24} cursor={"pointer"} />
+                </Box>
+                <Box className='icon-container' >
+                    <CgMoreO size={24} cursor={"pointer"} />
+                </Box>
+            </Flex>
         </Flex>
     </VStack>
   )

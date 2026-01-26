@@ -7,4 +7,4 @@ const UserPage = () => {
   </>
 }
 
-export default UserPage
+export default UserPage;
