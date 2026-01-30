@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Link, Text, VStack } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Link, Menu, MenuButton, MenuItem, MenuList, Portal, Text, VStack } from '@chakra-ui/react'
 import {BsInstagram} from "react-icons/bs"
 import React from 'react'
 import { CgMoreO } from 'react-icons/cg'
@@ -36,7 +36,16 @@ const UserHeader = () => {
                     <BsInstagram size={24} cursor={"pointer"} />
                 </Box>
                 <Box className='icon-container' >
-                    <CgMoreO size={24} cursor={"pointer"} />
+                    <Menu>
+                    <MenuButton>
+                    <CgMoreO size={24} cursor={"pointer"} />                        
+                    </MenuButton>
+                    <Portal>
+                        <MenuList>
+                            <MenuItem>Copy Link</MenuItem>
+                        </MenuList>
+                    </Portal>
+                    </Menu>
                 </Box>
             </Flex>
         </Flex>
