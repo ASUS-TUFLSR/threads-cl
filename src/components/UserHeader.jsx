@@ -1,10 +1,24 @@
-import { Avatar, Box, Flex, Link, Menu, MenuButton, MenuItem, MenuList, Portal, Text, VStack } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Link, Menu, MenuButton, MenuItem, MenuList, Portal, Text, Toast, VStack } from '@chakra-ui/react'
 import {BsInstagram} from "react-icons/bs"
 import React from 'react'
 import { CgMoreO } from 'react-icons/cg'
 
 const UserHeader = () => {
-  return (
+
+    const copyURL = () => {
+        const currentUrl = window.location.href;
+        navigator.clipboard.writeText(currentUrl).then(() => {
+            Toast({
+                title:"Account Creatted",
+                description: "We've created your account for you.",
+                status:"success",
+                duration:9000,
+                isClosable: true,
+            })
+        })
+    }
+
+    return (
     <VStack gap={4} alignItems="start" >
         <Flex justifyContent={"space-between"} w={"full"} >
             <Box>
@@ -41,8 +55,8 @@ const UserHeader = () => {
                     <CgMoreO size={24} cursor={"pointer"} />                        
                     </MenuButton>
                     <Portal>
-                        <MenuList>
-                            <MenuItem>Copy Link</MenuItem>
+                        <MenuList bg={"gray.dark"} >
+                            <MenuItem bg={"gray.dark"} onClick={copyURL} >Copy Link</MenuItem>
                         </MenuList>
                     </Portal>
                     </Menu>
@@ -54,3 +68,5 @@ const UserHeader = () => {
 }
 
 export default UserHeader
+
+//copy url added
