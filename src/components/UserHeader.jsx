@@ -1,22 +1,25 @@
-import { Avatar, Box, Flex, Link, Menu, MenuButton, MenuItem, MenuList, Portal, Text, Toast, VStack } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Link, Menu, MenuButton, MenuItem, MenuList, Portal, Text, useToast, VStack } from '@chakra-ui/react'
 import {BsInstagram} from "react-icons/bs"
 import React from 'react'
 import { CgMoreO } from 'react-icons/cg'
 
 const UserHeader = () => {
 
+
+    const toast = useToast();
+
     const copyURL = () => {
-        const currentUrl = window.location.href;
-        navigator.clipboard.writeText(currentUrl).then(() => {
-            Toast({
-                title:"Account Creatted",
-                description: "We've created your account for you.",
-                status:"success",
-                duration:9000,
-                isClosable: true,
-            })
-        })
-    }
+		const currentURL = window.location.href;
+		navigator.clipboard.writeText(currentURL).then(() => {
+			toast({
+				title: "Success.",
+				status: "success",
+				description: "Profile link copied.",
+				duration: 3000,
+				isClosable: true,
+			});
+		});
+	};
 
     return (
     <VStack gap={4} alignItems="start" >
