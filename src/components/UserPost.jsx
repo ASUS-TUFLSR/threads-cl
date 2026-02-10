@@ -1,6 +1,8 @@
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Image, Text } from "@chakra-ui/react";
 import { Box, Flex } from "@chakra-ui/react";
+import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import Actions from "./Actions";
 
 
 const UserPost = () => {
@@ -39,6 +41,31 @@ const UserPost = () => {
 							padding={"2px"}
 						/>
 					</Box>
+				</Flex>
+				<Flex flex={1} flexDirection={"column"} gap={2} >
+					<Flex justifyContent={"space-between"} w={"full"} >
+						<Flex w={"full"} alignItems={"center"} >
+							<Text fontSize={"sm"} fontWeight={"bold"} >markzuckerberg</Text>
+							<Image src="/verified.png" w={4} h={4} ml={1} />
+						</Flex>
+						<Flex gap={4} alignItems={"center"} >
+							<Text fontStyle={"sm"} color={"gray.light"} >1d</Text>
+							<BsThreeDots/>
+						</Flex>
+					</Flex>
+
+					<Text fontSize={"sm"} >This is my first post</Text>
+					<Box borderRadius={6}
+					 	 overflow={"hidden"}
+						 border={"1px solid"}
+						 borderColor={"gray.light"}
+					 >
+							<Image src="/post1.png" w={"full"} />
+					</Box>
+
+					<Flex gap={3} my={1} >
+							<Actions/>
+					</Flex>
 				</Flex>
 				
 			</Flex>
