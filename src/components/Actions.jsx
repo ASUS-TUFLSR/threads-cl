@@ -15,19 +15,20 @@ import {
 } from "@chakra-ui/react";
 
 
-const Actions = () => {
+const Actions = ({liked, setLiked}) => {
 
 	return (
 		<Flex flexDirection='column'>
 			<Flex gap={3} my={2} onClick={(e) => e.preventDefault()}>
 				<svg
 					aria-label='Like'
-					color={"white"}
-					fill={"transparent"}
+					color={liked ? "rgb(237. 73, 86)" : ""}
+					fill={liked ? "rgb(237. 73, 86)" : "transparent"}
 					height='19'
 					role='img'
 					viewBox='0 0 24 22'
 					width='20'
+                    onClick={() => setLiked(!liked)}
 				
 				>
 					<path

@@ -3,9 +3,11 @@ import { Box, Flex } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Actions from "./Actions";
+import { useState } from "react";
 
 
 const UserPost = () => {
+	const [liked, setLiked] = useState(false);
   return (
 		<Link to={"/markzuckerberg/post/1"}>
 			<Flex gap={3} mb={4} py={5}>
@@ -64,7 +66,7 @@ const UserPost = () => {
 					</Box>
 
 					<Flex gap={3} my={1} >
-							<Actions/>
+							<Actions liked={liked} setLiked={setLiked} />
 					</Flex>
 				</Flex>
 				
