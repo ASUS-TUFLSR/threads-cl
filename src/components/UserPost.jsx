@@ -26,7 +26,7 @@ const UserPost = ({likes, replies, postImg, postTitle}) => {
 						/>
 						<Avatar
 							size='xs'
-							name='John doe'
+							name='Goku'
 							src='https://bit.ly/sage-adebayo'
 							position={"absolute"}
 							bottom={"0px"}
@@ -35,7 +35,7 @@ const UserPost = ({likes, replies, postImg, postTitle}) => {
 						/>
 						<Avatar
 							size='xs'
-							name='John doe'
+							name='Vegeta'
 							src='https://bit.ly/prosper-baba'
 							position={"absolute"}
 							bottom={"0px"}
