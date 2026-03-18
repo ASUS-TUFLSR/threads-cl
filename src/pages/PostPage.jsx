@@ -55,10 +55,10 @@ const PostPage = () => {
       </Flex>
 
         <Divider my={4} />
-        <Comment/>
-        <Comment/>
-        <Comment/>
-        <Comment/>
+        <Comment comment="Look's really sick!" createdAt={"2d"} likes={100} username="johndoe" userAvatar="https://bit.ly/sage-adebayo" />
+        <Comment comment="Great post!" createdAt={"7d"} likes={100} username="kylie jenner" userAvatar="https://bit.ly/sage-adebayo"  />
+        <Comment comment="We really need these creators" createdAt={"25d"} likes={100} username="emraan" userAvatar="https://bit.ly/sage-adebayo"  />
+        <Comment comment="It's contrary depend's on each see's" createdAt={"1d"} likes={100} username="megan fox" userAvatar="https://bit.ly/sage-adebayo"  />
 
     </>
 
