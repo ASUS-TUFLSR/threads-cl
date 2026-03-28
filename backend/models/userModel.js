@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema({
         default: [],
     },
     bio: {
-        type: String,
+        type: [String],
         default: [],
     },
 
