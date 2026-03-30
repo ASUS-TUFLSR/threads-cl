@@ -50,7 +50,7 @@ export const loginUser = async(req, res) => {
     try {
         const {username, password} = req.body;
         const user = await User.findOne({username});
-        const isPassword = await bcrypt.compare(password, user.password);
+        const isPassword = await bcrypt.compare(password, user?.password || ""); // bcrypt can't compare with null values
 
         if(!user || !isPassword) {
             return res.status(400).json({message: "Invalid username or password"});
@@ -68,6 +68,16 @@ export const loginUser = async(req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
         console.log("Error in Login User: ", error.message );
+    }
+}
+
+export const logoutUser = async(req, res) => {
+    try {
+        res.cookie("jwt", "",{maxAge:1});
+        res.status(200).json("User logged out successfully")
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log("Error in logout User: ", error.message);
     }
 }
 
