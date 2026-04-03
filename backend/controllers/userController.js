@@ -88,7 +88,7 @@ export const followUnfollowUser = async(req, res) => {
         const userToModify = await User.findById(id);
         const currentUser = await User.findById(req.user._id);
 
-        if(id === req.user._id) return res.status(400).json({message: "You cannot follow/unfollow yourself"});
+        if(id === req.user._id.toString()) return res.status(400).json({message: "You cannot follow/unfollow yourself"});
 
         if(!userToModify || !currentUser) return res.status(400).json({message: "User not found"});
         const isFollowing = currentUser.following.includes(id);
@@ -118,6 +118,10 @@ export const updateUser = async(req, res) => {
       let user = await User.findById(userId);
       if(!user) return res.status(400).json({message: "User not found"});
       
+        if(req.params.id !== userId.toString()){
+            return res.status(400).json({message: "You cannot update other user's profile"})
+        }
+
       if(password){
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
