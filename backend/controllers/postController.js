@@ -95,3 +95,32 @@ export const likeUnlikePost = async(req, res) => {
         console.log("Error in likeUnlike", error.message);
     }
 }
+
+export const replyToPost = async(req, res) => {
+    try {
+        const {text} = req.body;
+        const postId = req.params.id;
+        const userId = req.user._id;
+        const userProfilePic = req.user.userProfilePic;
+        const username = req.user.username;
+
+        if(!text){
+            res.status(400).json({message: "Text field is required"});
+        }
+
+        const post = await Post.findById(postId);
+        if(!post){
+            res.status(404).json({message: "Post not found!"});
+        }
+
+        const reply = {userId, text, userProfilePic, username};
+
+        post.replies.push(reply);
+        await post.save();
+
+        res.status(200).json({message: "Reply added successfully", post})
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        console.log("Error in reply post", error.message);
+    }
+}
