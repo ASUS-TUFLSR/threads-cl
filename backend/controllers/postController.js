@@ -124,3 +124,21 @@ export const replyToPost = async(req, res) => {
         console.log("Error in reply post", error.message);
     }
 }
+
+export const getFeedPosts = async(req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+        if(!user){
+            res.status(404).json({message: "User not found"});
+        }
+
+        const following = user.following;
+        const feedPosts = await Post.fint({postedBy: {$in:following}}).sort({createdAt: -1});
+
+        res.status(200).json({feedPosts})
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        console.log("Error in getFeed", error.message);
+    }
+}
