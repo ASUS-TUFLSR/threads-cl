@@ -1,7 +1,7 @@
 import {atom} from "recoil"
 
 const authScreenAtom = atom({
-    key: 'authScreenAuto',
+    key: 'authScreenAtom',
     default: 'login',
 });
 
