@@ -47,13 +47,13 @@ const SignupCard = () => {
 		  
 				toast({
 			  title: "Error",
-			  description: data.message,
+			  description: data.error,
 			  status: "error",
 			  duration: 3000,  
 			  isClosable: true,
             });
 			
-			console.log(data.message)
+			console.log(data.error)
 			
 		} catch (error) {
 			console.log(error);

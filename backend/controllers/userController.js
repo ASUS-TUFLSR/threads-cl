@@ -7,11 +7,11 @@ export const getUserProfile = async(req, res) => {
       const {username} = req.params;
       try {
         const user = await User.findOne({username}).select("-password -updatedAt")
-        if(!user) return res.status(400).json({message: "User not found"});
+        if(!user) return res.status(400).json({error: "User not found"});
        
         res.status(200).json(user)
       } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({error: error.message});
         console.log("Error in userProfile", error);
       }      
 }
@@ -22,15 +22,15 @@ export const signupUser = async(req, res) => {
         const user = await User.findOne({$or:[{email}, {username}]});
 
         if(!name || !username || !email || !password){
-            return res.status(400).json({ message: "All field's are required" });
+            return res.status(400).json({ error: "All field's are required" });
         }
 
         if(user) {
              if (user.email === email) {
-             return res.status(400).json({ message: "Email already exists" });
+             return res.status(400).json({ error: "Email already exists" });
               }
              if (user.username === username) {
-             return res.status(400).json({ message: "Username already taken" });
+             return res.status(400).json({ error: "Username already taken" });
               }
         }
 
@@ -55,7 +55,7 @@ export const signupUser = async(req, res) => {
         
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: error.message });
         console.log("Error in signup User ", error.message)
     }
 }
@@ -67,7 +67,7 @@ export const loginUser = async(req, res) => {
         const isPassword = await bcrypt.compare(password, user?.password || ""); // bcrypt can't compare with null values
 
         if(!user || !isPassword) {
-            return res.status(400).json({message: "Invalid username or password"});
+            return res.status(400).json({error: "Invalid username or password"});
         }
 
         generateTokenAndSetCookies(user._id, res);
@@ -80,7 +80,7 @@ export const loginUser = async(req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: error.message });
         console.log("Error in Login User: ", error.message );
     }
 }
@@ -90,7 +90,7 @@ export const logoutUser = async(req, res) => {
         res.cookie("jwt", "",{maxAge:1});
         res.status(200).json("User logged out successfully")
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: error.message });
         console.log("Error in logout User: ", error.message);
     }
 }
@@ -102,9 +102,9 @@ export const followUnfollowUser = async(req, res) => {
         const userToModify = await User.findById(id);
         const currentUser = await User.findById(req.user._id);
 
-        if(id === req.user._id.toString()) return res.status(400).json({message: "You cannot follow/unfollow yourself"});
+        if(id === req.user._id.toString()) return res.status(400).json({error: "You cannot follow/unfollow yourself"});
 
-        if(!userToModify || !currentUser) return res.status(400).json({message: "User not found"});
+        if(!userToModify || !currentUser) return res.status(400).json({error: "User not found"});
         const isFollowing = currentUser.following.includes(id);
 
         if(isFollowing){
@@ -120,7 +120,7 @@ export const followUnfollowUser = async(req, res) => {
             res.status(200).json({message: "User followed successfully"});
         }
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({error: error.message});
         console.log("Error in FollowUnfollowUser: ", error.message)
     }
 }
@@ -130,10 +130,10 @@ export const updateUser = async(req, res) => {
      const userId = req.user._id;
     try {
       let user = await User.findById(userId);
-      if(!user) return res.status(400).json({message: "User not found"});
+      if(!user) return res.status(400).json({error: "User not found"});
       
         if(req.params.id !== userId.toString()){
-            return res.status(400).json({message: "You cannot update other user's profile"})
+            return res.status(400).json({error: "You cannot update other user's profile"})
         }
 
       if(password){
@@ -153,7 +153,7 @@ export const updateUser = async(req, res) => {
       res.status(200).json({message: "Profile updated successfully", user})
 
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({error: error.message});
         console.log("Error in UpdateUser: ", error.message);
     }
 }
