@@ -53,7 +53,10 @@ const SignupCard = () => {
 			  isClosable: true,
             });
 			
-			console.log(data.error)
+            localStorage.setItem("user-threads", JSON.stringify(data));
+			
+
+			//console.log(data.error)
 			
 		} catch (error) {
 			console.log(error);
