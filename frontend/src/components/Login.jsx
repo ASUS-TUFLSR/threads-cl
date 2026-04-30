@@ -45,14 +45,19 @@ const Login = () => {
 				body: JSON.stringify(inputs)
             });
             const data = await res.json();
-            console.log(data);
-            
-            showToast("Error", data.error, "error");
+            console.log(data.error)
+            if (!res.ok) {
+            showToast("Error", data.error || data.message, "error");
+            console.log(data, "res")
+            return;
+            }
 
-            localStorage.setItem("user-threads", JSON.stringify(data));
-            setUser(data)
+          showToast("Success", "Logged in successfully", "success");
+
+          localStorage.setItem("user-threads", JSON.stringify(data));
+          setUser(data);
         } catch (error) {
-            showToast("Error", error, "error");
+            showToast("Error", error.message, "error");
         }
 
     }

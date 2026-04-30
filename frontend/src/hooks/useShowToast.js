@@ -1,5 +1,5 @@
 import React from 'react'
-import {useToast} from "@chakra-ui/toast"
+import {useToast} from "@chakra-ui/react"
 
 const useShowToast = () => {
     const toast = useToast();
@@ -8,7 +8,7 @@ const useShowToast = () => {
             title: title,
             description: description,
             status: status,
-            duration: 5000,
+            duration: 3000,
             isClosable: true, 
         })
     }
