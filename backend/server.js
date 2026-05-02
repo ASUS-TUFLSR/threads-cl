@@ -13,8 +13,8 @@ const app = express();
 
 const PORT = process.env.PORT || 5000
 
-app.use(express.json()); // To parse JSON data in the req.body
-app.use(express.urlencoded({ extended: true })); // To parse form data in the req.body
+app.use(express.json({ limit: "10mb" })); // To parse JSON data in the req.body
+app.use(express.urlencoded({ limit: "10mb", extended: true })); // To parse form data in the req.body
 app.use(cookieParser());
 
 

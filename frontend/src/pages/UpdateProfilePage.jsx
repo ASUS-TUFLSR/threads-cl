@@ -53,7 +53,7 @@ import useShowToast from "../hooks/useShowToast";
 			setUser(data);
 			localStorage.setItem("user-threads", JSON.stringify(data));
 		} catch (error) {
-			showToast("Error", error, "error");
+			showToast("Error", error.message, "error");
 		} finally {
 			setUpdating(false);
 		}
