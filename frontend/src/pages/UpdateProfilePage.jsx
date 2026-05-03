@@ -39,19 +39,21 @@ import useShowToast from "../hooks/useShowToast";
 		try {
 			const res = await fetch(`/api/users/update/${user._id}`, {
 				method: "PUT",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({ ...inputs, profilePic: imgUrl }),
 			});
-			const data = await res.json(); // updated user object
+			const data = await res.json(); 
+			console.log(data)
 			if (data.error) {
 				showToast("Error", data.error, "error");
 				return;
 			}
 			showToast("Success", "Profile updated successfully", "success");
-			setUser(data);
-			localStorage.setItem("user-threads", JSON.stringify(data));
+			setUser(data.user);
+            localStorage.setItem("user-threads", JSON.stringify(data.user));
 		} catch (error) {
 			showToast("Error", error.message, "error");
 		} finally {
