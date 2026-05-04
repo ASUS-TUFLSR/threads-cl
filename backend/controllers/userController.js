@@ -157,8 +157,11 @@ export const updateUser = async(req, res) => {
       user.bio = bio || user.bio;
       user.profilePic = profilePic || user.profilePic;
       user.username = username || user.username;
+      user.password = null;
 
       user = await user.save();
+
+      
 
       res.status(200).json({message: "Profile updated successfully", user})
 
