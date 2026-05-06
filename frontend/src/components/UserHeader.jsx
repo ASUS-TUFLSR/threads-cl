@@ -1,17 +1,20 @@
 import { Avatar, Box, Button, Flex, Link, Menu, MenuButton, MenuItem, MenuList, Portal, Text, useToast, VStack } from '@chakra-ui/react'
 import {BsInstagram} from "react-icons/bs"
-import React from 'react'
+import React, { useState } from 'react'
 import { CgMoreO } from 'react-icons/cg'
 import {useRecoilValue} from "recoil"
 import userAtom from "../atoms/userAtom"
 import {Link as RouterLink} from "react-router-dom"
+import useShowToast from '../hooks/useShowToast'
 
 const UserHeader = ({user}) => {
 
 
     const toast = useToast();
-
+    const showToast = useShowToast();
     const currentUser = useRecoilValue(userAtom); // logged in user data
+    const [following, setFollowing] = useState(user.followers.includes(currentUser._id));
+    console.log(following)
 
     const copyURL = () => {
 		const currentURL = window.location.href;
@@ -25,6 +28,26 @@ const UserHeader = ({user}) => {
 			});
 		});
 	};
+
+    const handleFollowUnfollow = async() => {
+            try {
+                const res = await fetch(`/api/users/follow/${user._id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const data = await res.json();
+                if(data.error){
+                    showToast("Error", data.error, "error");
+                    return;
+                }
+                console.log(data)
+            } catch (error) {
+                showToast("Error", error.message, "error")
+            }
+    }
 
     return (
     <VStack gap={4} alignItems="start" >
@@ -69,7 +92,9 @@ const UserHeader = ({user}) => {
             </RouterLink>
         )}
          {currentUser._id !== user._id && (
-              <Button size={"sm"} >Follow</Button>
+              <Button size={"sm"}  onClick={handleFollowUnfollow} >{
+                following ? "Unfollow" : "Follow"
+              }</Button>
         )}
         <Flex w={"full"} justifyContent={"space-between"}>
             <Flex gap={2} alignItems={"center"} >
