@@ -26,6 +26,7 @@ import useShowToast from "../hooks/useShowToast";
 		password: "",
 	});
 	const fileRef = useRef(null);
+	
 	const [updating, setUpdating] = useState(false);
 
 	const showToast = useShowToast();
