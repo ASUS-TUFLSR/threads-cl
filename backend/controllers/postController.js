@@ -1,9 +1,11 @@
 import User from "../models/userModel.js"
 import Post from "../models/postModel.js"
+import {v2 as cloudinary} from "cloudinary"
 
 export const createPost = async(req, res) => {
     try {
-        const {postedBy, text, img} = req.body;
+        const {postedBy, text} = req.body;
+        let {img} = req.body;
 
         if(!postedBy || !text) {
             res.status(400).json({error: "Please fill in all the fields"})
@@ -22,6 +24,11 @@ export const createPost = async(req, res) => {
         const maxLength = 500;
         if(text.length > maxLength){
             return res.status(400).json({error: `Text must be less than ${maxLength} characters`})
+        }
+
+        if(img){
+          const uploadedResponse = await cloudinary.uploader.upload(img);
+          img = uploadedResponse.secure_url;
         }
 
         const newPost = new Post({postedBy, text, img});
