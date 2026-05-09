@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Button, CloseButton, FormControl, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Textarea, useColorModeValue, useDisclosure } from '@chakra-ui/react';
+import { Button, CloseButton, FormControl, Flex,Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useColorModeValue, useDisclosure, Image } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react'
 import usePreviewImg from '../hooks/usePreviewImg';
 import { BsFillImageFill } from 'react-icons/bs';
@@ -38,11 +38,18 @@ const CreatePost = () => {
 		}
     }
 
+    const resetPost = () => {
+    setPostText("");
+    setImgUrl("");
+    setRemainingChar(MAX_CHAR);
+    };
+
     const handleCreatePost = async () => {
       setLoading(true);
 		try {
 			const res = await fetch("/api/posts/create", {
 				method: "POST",
+        credentials:"include",
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -59,10 +66,9 @@ const CreatePost = () => {
 				setPosts([data, ...posts]);
 			}
 			onClose();
-			setPostText("");
-			setImgUrl("");
+      resetPost();
 		} catch (error) {
-			showToast("Error", error, "error");
+			showToast("Error", error.message, "error");
 		} finally {
 			setLoading(false);
 		}
@@ -80,7 +86,10 @@ const CreatePost = () => {
 >
         post
     </Button>
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={() => {
+              resetPost();
+             onClose();
+    }}>
         <ModalOverlay />
 
         <ModalContent>
@@ -115,7 +124,12 @@ const CreatePost = () => {
 
             {imgUrl && (
               <Flex mt={5} w={"full"} position={"relative"} >
-                <Image src={imgUrl} alt="Selected Img" />
+                <Image src={imgUrl}
+                        alt="Selected Img"
+                        borderRadius="md"
+                        maxH="300px"
+                        objectFit="cover"
+                />
                 <CloseButton
                  onClick={() => {
                   setImgUrl(" ")
@@ -130,7 +144,7 @@ const CreatePost = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={handleCreatePost} isLoading={loading} >
+            <Button colorScheme='blue' mr={3} onClick={handleCreatePost} isLoading={loading} isDisabled={!postText.trim() && !imgUrl} >
               Post
             </Button>
           </ModalFooter>
