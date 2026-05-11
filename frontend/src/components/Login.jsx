@@ -27,6 +27,7 @@ const Login = () => {
 
     const [, setAuthScreen] = useRecoilState(authScreenAtom);
     const setUser = useSetRecoilState(userAtom);
+    const [loading, setLoading] = useState(true);
 
     const [inputs, setInputs] = useState({
         username: "",
@@ -36,6 +37,7 @@ const Login = () => {
     const showToast = useShowToast();
 
     const handleLogin = async() => {
+        setLoading(true);
         try {
             const res = await fetch("/api/users/login", {
 				method: 'POST',
@@ -53,11 +55,12 @@ const Login = () => {
             }
 
           showToast("Success", "Logged in successfully", "success");
-
           localStorage.setItem("user-threads", JSON.stringify(data));
           setUser(data);
         } catch (error) {
             showToast("Error", error.message, "error");
+        } finally {
+            setLoading(false);
         }
 
     }
@@ -104,7 +107,7 @@ const Login = () => {
                         </FormControl>
                         <Stack spacing={10} pt={2}>
                             <Button
-                                loadingText='Submitting'
+                                loadingText='Logging In'
                                 size='lg'
                                 bg={useColorModeValue("gray.600", "gray.700")}
                                 color={"white"}
@@ -112,6 +115,7 @@ const Login = () => {
                                     bg: useColorModeValue("gray.700", "gray.800"),
                                 }}
                                 onClick={handleLogin}
+                                isLoading={loading}
                             >
                                 Login
                             </Button>
