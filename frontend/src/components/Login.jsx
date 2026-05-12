@@ -27,7 +27,7 @@ const Login = () => {
 
     const [, setAuthScreen] = useRecoilState(authScreenAtom);
     const setUser = useSetRecoilState(userAtom);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [inputs, setInputs] = useState({
         username: "",
