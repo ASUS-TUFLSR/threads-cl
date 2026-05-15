@@ -22,7 +22,7 @@ const UserPage = () => {
           return;
         }
         setUser(data)
-        // console.log(data, "userPAge")
+        
       } catch (error) {
         showToast("Error", error.message, "error");
       } finally {
@@ -30,7 +30,7 @@ const UserPage = () => {
       }
     };
     getUser();
-  }, [username, showToast])
+  }, [username])
 
   if(!user && loading){
     return (

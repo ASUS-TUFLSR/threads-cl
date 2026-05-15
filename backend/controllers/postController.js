@@ -84,7 +84,7 @@ export const likeUnlikePost = async(req, res) => {
         const post = await Post.findById(postId);
 
         if(!post){
-            res.status(404).json({error: "Not found"});
+            return res.status(404).json({error: "Not found"});
         }
 
         const userLikePost = post.likes.includes(userId);
@@ -108,16 +108,16 @@ export const replyToPost = async(req, res) => {
         const {text} = req.body;
         const postId = req.params.id;
         const userId = req.user._id;
-        const userProfilePic = req.user.userProfilePic;
+        const userProfilePic = req.user.profilePic;
         const username = req.user.username;
 
         if(!text){
-            res.status(400).json({error: "Text field is required"});
+            return res.status(400).json({error: "Text field is required"});
         }
 
         const post = await Post.findById(postId);
         if(!post){
-            res.status(404).json({error: "Post not found!"});
+            return res.status(404).json({error: "Post not found!"});
         }
 
         const reply = {userId, text, userProfilePic, username};

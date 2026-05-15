@@ -8,7 +8,6 @@ import {formatDistanceToNow} from "date-fns"
 
 
 const UserPost = ({post, postedBy}) => {
-    const [liked, setLiked] = useState(false);
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const showToast = useShowToast();
@@ -39,7 +38,7 @@ const UserPost = ({post, postedBy}) => {
         <Link to={`/${user.username}/post/${post._id}`}>
             <Flex gap={3} mb={4} py={5}>
                 <Flex flexDirection={"column"} alignItems={"center"}>
-                    <Avatar size='md' name={user?.username} src={user?.profilePic} 
+                    <Avatar size='md' name={user?.name} src={user?.profilePic} 
                       onClick={(e) => {
                         e.preventDefault();
                         navigate(`/${user.username}`)
@@ -52,7 +51,7 @@ const UserPost = ({post, postedBy}) => {
                             <Avatar
                                 size='xs'
                                 name='Mantasha Pal'
-                                src={post.replies[0].userProfilePic}
+                                src={post.replies[0].profilePic}
                                 position={"absolute"}
                                 top={"0px"}
                                 left='15px'
@@ -63,7 +62,7 @@ const UserPost = ({post, postedBy}) => {
                         <Avatar
                             size='xs'
                             name='Goku'
-                            src={post.replies[0].userProfilePic}
+                            src={post.replies[1].profilePic}
                             position={"absolute"}
                             bottom={"0px"}
                             right='-5px'
@@ -74,7 +73,7 @@ const UserPost = ({post, postedBy}) => {
                         <Avatar
                             size='xs'
                             name='Vegeta'
-                            src={post.replies[2].userProfilePic}
+                            src={post.replies[2].profilePic}
                             position={"absolute"}
                             bottom={"0px"}
                             left='4px'
@@ -112,14 +111,10 @@ const UserPost = ({post, postedBy}) => {
                     </Box>)}
 
                     <Flex gap={3} my={1} >
-                            <Actions liked={liked} setLiked={setLiked} />
+                            <Actions post={post} />
                     </Flex>
 
-                    <Flex gap={2} alignItems={"center"} >
-                        <Text color={"gray.light"} fontSize={"sm"} >{post.replies?.length || 0} replies</Text>
-                        <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"} ></Box>
-                        <Text color={"gray.light"} fontSize={"sm"} >{post.likes?.length || 0} likes</Text>
-                    </Flex>
+                    
                 </Flex>
                 
             </Flex>
