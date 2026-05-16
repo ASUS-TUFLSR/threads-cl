@@ -51,7 +51,7 @@ const UserPost = ({post, postedBy}) => {
                             <Avatar
                                 size='xs'
                                 name='Mantasha Pal'
-                                src={post.replies[0].profilePic}
+                                src={post.replies[0].userProfilePic}
                                 position={"absolute"}
                                 top={"0px"}
                                 left='15px'
@@ -62,7 +62,7 @@ const UserPost = ({post, postedBy}) => {
                         <Avatar
                             size='xs'
                             name='Goku'
-                            src={post.replies[1].profilePic}
+                            src={post.replies[1].userProfilePic}
                             position={"absolute"}
                             bottom={"0px"}
                             right='-5px'
@@ -73,7 +73,7 @@ const UserPost = ({post, postedBy}) => {
                         <Avatar
                             size='xs'
                             name='Vegeta'
-                            src={post.replies[2].profilePic}
+                            src={post.replies[2].userProfilePic}
                             position={"absolute"}
                             bottom={"0px"}
                             left='4px'

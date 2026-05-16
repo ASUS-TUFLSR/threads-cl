@@ -17,25 +17,17 @@ import {
 
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
+
 
 const Actions = ({ post: post_ }) => {
 	
 	const user = useRecoilValue(userAtom);
-
-	const [post, setPost] = useState(post_ || {
-	likes: [],
-	replies: [],
-    });
-
-	const [liked, setLiked] = useState(
-	post_?.likes?.includes(user?._id) || false
-    );
-
+	const [post, setPost] = useState(post_ || { likes: [], replies: [],});
+	const [liked, setLiked] = useState(post_?.likes?.includes(user?._id) || false);
+	const [reply, setReply] = useState("")
 	const showToast = useShowToast();
-
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const handleLikeAndUnlike = async () => {
@@ -83,6 +75,33 @@ const Actions = ({ post: post_ }) => {
 			showToast("Error", error.message, "error");
 		}
 	};
+
+	const handleReply = async () => {
+		if(!user) return showToast("Error", "You must be logged in to reply to a post", "error");
+		try {
+			const res = await fetch(`/api/posts/reply/${post._id}`, {
+				method: 'PUT',
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({text:reply})
+			})
+
+			const data = await res.json();
+			
+			if(!res.ok){
+				showToast("Error", data.error, "error");
+				return;
+			}
+			setPost({...post, replies:[...post.replies, data.reply]});
+			showToast("Success", "Reply posted successfully", "success");
+			console.log(data);
+			onClose(); 
+		} catch (error) {
+			showToast("Error", error.message, "error");
+		}
+	}
 
 	return (
 		<Flex flexDirection='column'>
@@ -160,12 +179,17 @@ const Actions = ({ post: post_ }) => {
 
 					<ModalBody pb={6}>
 						<FormControl>
-							<Input placeholder='Reply goes here..' />
+							<Input placeholder='Reply goes here..'
+							 value={reply}
+							 onChange={(e) => setReply(e.target.value)}
+							/>
 						</FormControl>
 					</ModalBody>
 
 					<ModalFooter>
-						<Button colorScheme='blue' size={"sm"} mr={3}>
+						<Button colorScheme='blue' size={"sm"} mr={3} 
+						       onClick={handleReply}
+						>
 							Reply
 						</Button>
 					</ModalFooter>
