@@ -26,7 +26,8 @@ const Actions = ({ post: post_ }) => {
 	const user = useRecoilValue(userAtom);
 	const [post, setPost] = useState(post_ || { likes: [], replies: [],});
 	const [liked, setLiked] = useState(post_?.likes?.includes(user?._id) || false);
-	const [reply, setReply] = useState("")
+	const [reply, setReply] = useState("");
+	const [isReplying, setIsReplying] = useState(false);
 	const showToast = useShowToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -78,6 +79,8 @@ const Actions = ({ post: post_ }) => {
 
 	const handleReply = async () => {
 		if(!user) return showToast("Error", "You must be logged in to reply to a post", "error");
+		if(isReplying) return;
+		setIsReplying(true);
 		try {
 			const res = await fetch(`/api/posts/reply/${post._id}`, {
 				method: 'PUT',
@@ -100,6 +103,8 @@ const Actions = ({ post: post_ }) => {
 			onClose(); 
 		} catch (error) {
 			showToast("Error", error.message, "error");
+		} finally {
+			setIsReplying(false);
 		}
 	}
 
@@ -187,7 +192,8 @@ const Actions = ({ post: post_ }) => {
 					</ModalBody>
 
 					<ModalFooter>
-						<Button colorScheme='blue' size={"sm"} mr={3} 
+						<Button colorScheme='blue' size={"sm"} mr={3}
+								isLoading={isReplying} 
 						       onClick={handleReply}
 						>
 							Reply
