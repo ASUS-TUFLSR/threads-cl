@@ -7,7 +7,7 @@ import useShowToast from "../hooks/useShowToast";
 import {formatDistanceToNow} from "date-fns" 
 
 
-const UserPost = ({post, postedBy}) => {
+const Post = ({post, postedBy}) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const showToast = useShowToast();
@@ -122,4 +122,4 @@ const UserPost = ({post, postedBy}) => {
     );
 }
 
-export default UserPost
+export default Post
