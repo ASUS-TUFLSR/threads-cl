@@ -83,7 +83,7 @@ const PostPage = () => {
           </Flex>
           <Flex gap={4} alignItems="center" >
             <Text fontSize={"xs"} width={36} textAlign={"right"} color={"gray.light"}>
-						{formatDistanceToNow(new Date(currentPost.post.createdAt))} ago
+						{formatDistanceToNow(new Date(currentPost?.createdAt))} ago
 					</Text>
             {currentUser?._id === user._id && (
 						<DeleteIcon size={20} cursor={"pointer"} onClick={handleDeletePost} />
@@ -91,26 +91,26 @@ const PostPage = () => {
           </Flex>
         </Flex>
 
-        <Text my={3} >{currentPost?.post?.text}</Text>
+        <Text my={3} >{currentPost?.text}</Text>
 
-        {currentPost?.post?.img && (
+        {currentPost?.img && (
 				<Box borderRadius={6} overflow={"hidden"} border={"1px solid"} borderColor={"gray.light"}>
-					<Image src={currentPost?.post?.img} w={"full"} />
+					<Image src={currentPost?.img} w={"full"} />
 				</Box>
 			)}
 
 
         <Flex gap={3} my={3} >
-            <Actions post={currentPost?.post} />
+            <Actions post={currentPost} />
         </Flex>
 
         <Divider my={4} />
 
         <Flex gap={2} alignItems={"center"} >
-          <Text color={"gray.light"} fontSize={"sm"} >{currentPost?.post?.replies?.length || 0} replies</Text>
+          <Text color={"gray.light"} fontSize={"sm"} >{currentPost?.replies?.length || 0} replies</Text>
           <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"} ></Box>
           <Text color={"gray.light"} fontSize={"sm"} >
-            {currentPost?.post?.likes?.length || 0} likes
+            {currentPost?.likes?.length || 0} likes
              </Text>
 
         </Flex>
@@ -127,11 +127,11 @@ const PostPage = () => {
       </Flex>
 
         <Divider my={4} />
-      {currentPost.post.replies.map((reply) => (
+      {currentPost.replies.map((reply) => (
 				<Comment
 					key={reply._userId}
 					reply={reply}
-					lastReply={reply._userId === currentPost.post.replies[currentPost.post.replies.length - 1]._userId}
+					lastReply={reply._userId === currentPost.replies[currentPost.replies.length - 1]._userId}
 				/>
 			))}
     </>
