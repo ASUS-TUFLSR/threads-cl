@@ -79,12 +79,12 @@ const CreatePost = () => {
     <Button
       position={'fixed'}
       bottom={10}
-      right={10}
-      leftIcon={<AddIcon/>}
+      right={5}
       bg={useColorModeValue("gray.300", "gray.dark")}
       onClick={onOpen}
->
-        post
+      size={{base:"sm", sm:"md"}}
+>  
+        <AddIcon/>
     </Button>
     <Modal isOpen={isOpen} onClose={() => {
               resetPost();
