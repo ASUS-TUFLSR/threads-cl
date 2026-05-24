@@ -16,16 +16,18 @@ import {
 } from "@chakra-ui/react";
 
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
+import postsAtom from "../atoms/postsAtom";
 
 
-const Actions = ({ post: post_ }) => {
+const Actions = ({ post }) => {
 	
 	const user = useRecoilValue(userAtom);
-	const [post, setPost] = useState(post_ || { likes: [], replies: [],});
-	const [liked, setLiked] = useState(post_?.likes?.includes(user?._id) || false);
+	
+	const [liked, setLiked] = useState(post?.likes?.includes(user?._id) || false);
+	const [posts, setPosts] = useRecoilState(postsAtom);
 	const [reply, setReply] = useState("");
 	const [isReplying, setIsReplying] = useState(false);
 	const showToast = useShowToast();
@@ -58,17 +60,21 @@ const Actions = ({ post: post_ }) => {
 			}
 
 			if (!liked) {
-				setPost((prev) => ({
-					...prev,
-					likes: [...prev.likes, user._id],
-				}));
+				const updatedPost = posts.map((p) => {
+					if(p._id === post._id){
+						return {...p, likes: [...p.likes, user._id]};
+					}
+					return p;
+				})
+				setPosts(updatedPost);
 			} else {
-				setPost((prev) => ({
-					...prev,
-					likes: prev.likes.filter(
-						(id) => id !== user._id
-					),
-				}));
+				const updatedPost = post.map((p) => {
+					if(p._id === post._id){
+						return {...p, likes: p.likes.filter((id) => id !== user._id)};
+					}
+					return post;
+				})
+				setPosts(updatedPost);
 			}
 
 			setLiked((prev) => !prev);
@@ -97,7 +103,13 @@ const Actions = ({ post: post_ }) => {
 				showToast("Error", data.error, "error");
 				return;
 			}
-			setPost({...post, replies:[...post.replies, data.reply]});
+			const updatedPost = posts.map((p) => {
+				if(p._id === post._id){
+					return {...p, replies: [...p.replies, data]};
+				}
+				return p;
+			})
+			setPosts(updatedPost);
 			showToast("Success", "Reply posted successfully", "success");
 			onClose(); 
 			setReply("");
