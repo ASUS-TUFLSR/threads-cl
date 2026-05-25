@@ -25,4 +25,4 @@ const Comment = ({reply, lastReply}) => {
   )
 }
 
-export default Comment
+export default Comment;
