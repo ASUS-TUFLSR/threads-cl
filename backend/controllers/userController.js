@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import generateTokenAndSetCookies from "../utils/helpers/generateTokenAndSetCookies.js";
 import { v2 as cloudinary } from "cloudinary"
 import mongoose from "mongoose";
+import Post from "../models/postModel.js";
 
 
 export const getUserProfile = async(req, res) => {
@@ -172,6 +173,17 @@ export const updateUser = async(req, res) => {
      
 
       user = await user.save();
+      // This is find all posts that this user replies and update username and userProfilePic fields
+      await Post.updateMany(
+        {"replies.userId": userId},
+        {
+            $set:{
+                "replies.$[reply].username":user.username,
+                "replies.$[reply].userProfilePic":user.profilePic
+            }
+        },
+        {arrayFilter:[{"reply.userId":userId}]}
+      );
 
     
       res.status(200).json({message: "Profile updated successfully", user})
