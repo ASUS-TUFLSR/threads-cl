@@ -36,7 +36,7 @@ const UserPage = () => {
     getPosts();
   }, [username, setPosts])
  
-  console.log("recoil atom post",posts)
+  // console.log("recoil atom post",posts)
 
   if(!user && loading){
     return (
