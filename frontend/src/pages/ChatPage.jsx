@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-binary-expression */
 import { Button } from '@chakra-ui/button'
 import { SearchIcon } from '@chakra-ui/icons'
 import { Box, Flex, Input, Skeleton, SkeletonCircle, Text, useColorModeValue } from '@chakra-ui/react'
@@ -37,7 +38,7 @@ const ChatPage = () => {
                </Flex>
             </form>
 
-            {true && (
+            {false && (
                [0,1,2,3,4].map((_, i) => (
                 <Flex key={i} gap={4} alignItems={"center"} p={"1"} borderRadius={"md"} >
                    <Box>
