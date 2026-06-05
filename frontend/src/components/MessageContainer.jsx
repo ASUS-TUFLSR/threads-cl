@@ -5,7 +5,9 @@ import Message from './Message'
 import MessageInput from './MessageInput'
 
 const MessageContainer = () => {
-  return (
+  
+  
+    return (
     <Flex flex={70} bg={useColorModeValue("gray.200", "grey.dark")} borderRadius={"md"} flexDir={"column"} p={2}>
         <Flex w={"full"} h={12} alignItems={"center"} gap={2}>
            <Avatar src="" size={"sm"}/>  

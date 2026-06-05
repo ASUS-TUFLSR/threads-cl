@@ -19,11 +19,11 @@ import useShowToast from "../hooks/useShowToast";
   const  UpdateProfilePage = () => {
 	const [user, setUser] = useRecoilState(userAtom);
 	const [inputs, setInputs] = useState({
-		name: user.name,
-		username: user.username,
-		email: user.email,
-		bio: user.bio,
-		password: "",
+		 name: user.name,
+         username: user.username,
+         email: user.email,
+         bio: user.bio,
+         password: "",
 	});
 	const fileRef = useRef(null);
 	
@@ -47,20 +47,21 @@ import useShowToast from "../hooks/useShowToast";
 				body: JSON.stringify({ ...inputs, profilePic: imgUrl }),
 			});
 			const data = await res.json(); 
-			console.log(data)
 			if (data.error) {
 				showToast("Error", data.error, "error");
 				return;
 			}
+			// console.log(data)
 			showToast("Success", "Profile updated successfully", "success");
-			setUser(data.user);
-            localStorage.setItem("user-threads", JSON.stringify(data.user));
+			setUser(data);
+            localStorage.setItem("user-threads", JSON.stringify(data));
 		} catch (error) {
 			showToast("Error", error.message, "error");
 		} finally {
 			setUpdating(false);
 		}
 	};
+
   return (
     <form onSubmit={handleSubmit}>
 			<Flex align={"center"} justify={"center"} my={6}>

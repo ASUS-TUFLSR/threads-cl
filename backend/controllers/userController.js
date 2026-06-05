@@ -142,6 +142,7 @@ export const followUnfollowUser = async(req, res) => {
 export const updateUser = async(req, res) => {
      const {name, email, username, password, bio} = req.body;
      let { profilePic } = req.body;
+
      const userId = req.user._id;
     try {
       let user = await User.findById(userId);
@@ -167,9 +168,9 @@ export const updateUser = async(req, res) => {
 
       user.name = name || user.name;
       user.email = email || user.email;
-      user.bio = bio || user.bio;
-      user.profilePic = profilePic || user.profilePic;
       user.username = username || user.username;
+      user.profilePic = profilePic || user.profilePic;
+      user.bio = bio || user.bio;
      
 
       user = await user.save();
@@ -178,15 +179,17 @@ export const updateUser = async(req, res) => {
         {"replies.userId": userId},
         {
             $set:{
-                "replies.$[reply].username":user.username,
-                "replies.$[reply].userProfilePic":user.profilePic
+                "replies.$[reply].username": user.username,
+			    "replies.$[reply].userProfilePic": user.profilePic,
             }
         },
-        {arrayFilter:[{"reply.userId":userId}]}
+        {arrayFilters:[{"reply.userId":userId}]}
       );
 
+      // password should be null in response
+		user.password = null;
     
-      res.status(200).json({message: "Profile updated successfully", user})
+      res.status(200).json(user)
 
     } catch (error) {
         res.status(500).json({error: error.message});
