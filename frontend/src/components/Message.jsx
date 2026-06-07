@@ -7,6 +7,7 @@ import userAtom from '../atoms/userAtom'
 const Message = ({ownMessage, message}) => {
     const selectedConversation = useRecoilValue(selectedConversationAtom);
     const user = useRecoilValue(userAtom);
+    console.log(user)
   return (
     <>
      {ownMessage ? (

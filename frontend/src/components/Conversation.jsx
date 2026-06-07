@@ -11,8 +11,10 @@ const Conversation = ({conversation}) => {
     const currentUser = useRecoilValue(userAtom)
     const lastMessage = conversation.lastMessage;
     const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
-    const colorMode = useColorMode()
+    const colorMode = useColorMode();
+
     console.log( "selectedConversation",selectedConversation)
+    console.log("currentUser", currentUser)
 
   return (
     <Flex gap={4} alignItems={"center"} p={"1"} _hover={{
