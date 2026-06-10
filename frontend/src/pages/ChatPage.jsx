@@ -46,29 +46,52 @@ const ChatPage = () => {
     e.preventDefault();
     setSearchingUser(true);
     try {
-       const res = await fetch(`/api/users/profile/${saerchText}`);
-       const searchedUser = await res.json();
-       console.log("searchedUser", searchedUser)
 
-       if(searchedUser.error){
+      const res = await fetch(`/api/users/profile/${saerchText}`);
+      const searchedUser = await res.json();
+      // console.log("searchedUser", searchedUser)
+
+      if(searchedUser.error){
         showToast("Error", searchedUser.error, "error");
         return;
-       }
+      }
 
-       if(searchedUser._id === currentUser._id){
+      const messageingYourself = searchedUser._id === currentUser._id;
+
+      if(messageingYourself){
         showToast("Error", "You cannot message yourself loner!", "error");
         return;  
       }
 
-      if(conversations.find((conversation) => conversation.participants[0]._id === searchedUser._id)){
+      const conversationAlreadyExists = conversations.find((conversation) => conversation.participants[0]._id === searchedUser._id)
+
+      if(conversationAlreadyExists){
         setSelectedConversation({
-          _id: conversations.find((conversation) => conversation.participants[0]._id === searchedUser._id)._id,
+          _id: conversationAlreadyExists._id,
           userId: searchedUser._id,
           username: searchedUser.username,
           userProfilePic: searchedUser.profilePic
         });
         return;
       }
+
+      const mockConversation = {
+        mock: true,
+        lastMessage: {
+          text: "",
+          sender: "",
+        },
+        _id: Date.now(),
+        participants: [
+          {
+            _id: searchedUser._id,
+            username: searchedUser.username,
+            profilePic: searchedUser.profilePic
+          }
+        ]
+      }
+
+      setConversations((prevConvs) => [...prevConvs, mockConversation]);
 
     } catch (error) {
       showToast("Error", error.message, "error");
@@ -84,7 +107,7 @@ const ChatPage = () => {
       <Flex gap={4} flexDirection={{ base:"column", md:"row"}}
         maxW={{sm:"400px",md:"full"}}
         mx={"auto"}
-       >
+      >
           <Flex flex={30} 
                 gap={2}
                 flexDirection={"column"}
@@ -103,7 +126,6 @@ const ChatPage = () => {
                   <Button size={"sm"} onClick={handleConversationSearch} isLoading={searchingUser}  >
                     <SearchIcon/>
                   </Button>
- 
                </Flex>
             </form>
 
@@ -118,6 +140,7 @@ const ChatPage = () => {
                       <Skeleton h={"10px"} w={"80px"} />
                       <Skeleton h={"8px"} w={"90%"} />
                    </Flex>
+            
                 </Flex>
                ))
             )}
