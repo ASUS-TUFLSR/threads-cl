@@ -7,6 +7,7 @@ import { conversationsAtom, selectedConversationAtom } from '../atoms/messageAto
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import userAtom from '../atoms/userAtom'
 import { useSocket } from '../context/SocketContext'
+import { useRef } from 'react'
 
 const MessageContainer = () => {
   
@@ -18,6 +19,7 @@ const MessageContainer = () => {
     const currentUser = useRecoilValue(userAtom);
     const {socket} = useSocket();
     const setConversations = useSetRecoilState(conversationsAtom)
+    const messageEndRef = useRef(null);
 
     useEffect(() => {
       socket.on("mewMessage", (message) => {
@@ -35,9 +37,9 @@ const MessageContainer = () => {
                     }
                 }
             }
-            return conversation
+            return conversation;
         })
-        return updatedConversations
+        return updatedConversations;
       });
 
       return () => socket.off("newMessage");
@@ -65,6 +67,10 @@ const MessageContainer = () => {
         getMessages();
     }, [showToast, selectedConversation.userId])
   
+    useEffect(() => {
+        messageEndRef.current?.scrollIntoView({behavior: "smooth"});
+    }, [messages])
+
     return (
     <Flex flex={70} bg={useColorModeValue("gray.200", "grey.dark")} borderRadius={"md"} flexDir={"column"} p={2}>
         <Flex w={"full"} h={12} alignItems={"center"} gap={2}>
@@ -91,7 +97,12 @@ const MessageContainer = () => {
             )}
               {!loadingMessages && (
                 messages.map((message) => (
-                    <Message key={message._id} message={message} ownMessage={currentUser._id === message.sender} />
+                    <Flex key={message._id} 
+                     direction={"column"}
+                     ref={messages.length - 1 === messages.indexOf(message) ? messageEndRef : null}
+                    >    
+                        <Message message={message} ownMessage={currentUser._id === message.sender} />
+                    </Flex>
                 ))
               )}
          </Flex>
