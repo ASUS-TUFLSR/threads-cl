@@ -102,6 +102,8 @@ const ChatPage = () => {
     }
   }
 
+  console.log(conversations, "chat page")
+
   return (
     <Box position={"absolute"} p={4}
          left={"50%"} w={{base:"100%", md:"80%", lg:"750px"}} transform={"translateX(-50%)"}

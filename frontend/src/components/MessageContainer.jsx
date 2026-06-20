@@ -4,7 +4,7 @@ import Message from './Message'
 import MessageInput from './MessageInput'
 import useShowToast from '../hooks/useShowToast'
 import { conversationsAtom, selectedConversationAtom } from '../atoms/messageAtom'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import userAtom from '../atoms/userAtom'
 import { useSocket } from '../context/SocketContext'
 import { useRef } from 'react'
@@ -12,8 +12,8 @@ import { useRef } from 'react'
 const MessageContainer = () => {
   
     const showToast = useShowToast();
-    // eslint-disable-next-line no-unused-vars
-    const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
+    
+    const selectedConversation = useRecoilValue(selectedConversationAtom);
     const [loadingMessages, setLoadingMessages] = useState(true);
     const [messages, setMessages] = useState([]);
     const currentUser = useRecoilValue(userAtom);
@@ -22,13 +22,15 @@ const MessageContainer = () => {
     const messageEndRef = useRef(null);
 
     useEffect(() => {
-      socket.on("mewMessage", (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
+      socket.on("newMessage", (message) => {
+        if (selectedConversation._id === message.conversationId){
+            setMessages((prevMessages) => [...prevMessages, message]);
+        } 
+     
 
       setConversations((prev) => {
         const updatedConversations = prev.map(conversation => {
-            if(conversation._id === selectedConversation._id){
+            if(conversation._id === message.conversationId){
                 return {
                     ...conversation,
                     lastMessage: {
@@ -41,6 +43,7 @@ const MessageContainer = () => {
         })
         return updatedConversations;
       });
+   });
 
       return () => socket.off("newMessage");
     }, [socket]);
