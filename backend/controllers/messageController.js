@@ -1,6 +1,7 @@
 import Conversation from "../models/conversationModel.js";
 import Message from "../models/messageModel.js";
 import { getRecipientSocketId } from "../socket/socket.js";
+import { io } from "../socket/socket.js"; 
 
 export const sendMessage = async (req, res) => {
     try {
@@ -8,17 +9,14 @@ export const sendMessage = async (req, res) => {
         const senderId = req.user._id;
 
         let conversation = await Conversation.findOne({
-            participants: {$all: [senderId, recipientId]},
+            participants: { $all: [senderId, recipientId] },
         });
 
-        if(!conversation) {
+        if (!conversation) {
             conversation = new Conversation({
                 participants: [senderId, recipientId],
-                lastMessage: {
-                    text: message,
-                    sender: senderId,
-                }
-            })
+                lastMessage: { text: message, sender: senderId }
+            });
             await conversation.save();
         }
 
@@ -28,26 +26,24 @@ export const sendMessage = async (req, res) => {
             text: message
         });
 
-        await Promise.all([newMessage.save(), conversation.updateOne({
-            lastMessage: {
-                text: message,
-                sender: senderId
-            },
-        }),
-    ]);
+        await Promise.all([
+            newMessage.save(),
+            conversation.updateOne({
+                lastMessage: { text: message, sender: senderId }
+            })
+        ]);
 
-    const recipientSocketId = getRecipientSocketId(recipientId);
-    if(recipientSocketId){
-      io.to(recipientSocketId).emit("newMessage", newMessage);
-    }
+        const recipientSocketId = getRecipientSocketId(recipientId);
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("newMessage", newMessage);   // ← This was failing
+        }
 
-    res.status(201).json(newMessage);
-
+        res.status(201).json(newMessage);
 
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const getMessages = async(req, res) => {
     const {otherUserId} = req.params;
@@ -58,7 +54,7 @@ export const getMessages = async(req, res) => {
         });
 
         if(!conversation){
-            return res.status(404).json({message: "Messages not found!"});
+            return res.status(404).json({message: "Conversation not found!"});
         }
 
         const messages = await Message.find({

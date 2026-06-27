@@ -16,17 +16,21 @@ const ChatPage = () => {
 
   const [loadingConversations, setLoadingConversations] = useState(true);
   const [searchingUser, setSearchingUser] = useState(false)
-  const [saerchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [conversations, setConversations] = useRecoilState(conversationsAtom);
   const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
   const currentUser = useRecoilValue(userAtom);
   const showToast = useShowToast();
-  const {socket, onlineUsers} = useSocket()
+  const {onlineUsers} = useSocket()
   
   useEffect(() => {
     const getConversations = async() => {
+
       try {
-        const res = await fetch("/api/messages/conversations");
+        const res = await fetch(`/api/messages/conversations`, {
+              credentials: "include"
+        });
+
         const data = await res.json();
 
         if(data.erorr){
@@ -49,7 +53,7 @@ const ChatPage = () => {
     setSearchingUser(true);
     try {
 
-      const res = await fetch(`/api/users/profile/${saerchText}`);
+      const res = await fetch(`/api/users/profile/${searchText}`);
       const searchedUser = await res.json();
       // console.log("searchedUser", searchedUser)
 
@@ -58,9 +62,9 @@ const ChatPage = () => {
         return;
       }
 
-      const messageingYourself = searchedUser._id === currentUser._id;
+      const messagingYourself = searchedUser._id === currentUser._id;
 
-      if(messageingYourself){
+      if(messagingYourself){
         showToast("Error", "You cannot message yourself loner!", "error");
         return;  
       }
@@ -95,6 +99,14 @@ const ChatPage = () => {
 
       setConversations((prevConvs) => [...prevConvs, mockConversation]);
 
+      setSelectedConversation({
+         _id: mockConversation._id,
+         userId: searchedUser._id,
+         username: searchedUser.username,
+         userProfilePic: searchedUser.profilePic,
+         mock: true
+      });
+
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
@@ -103,6 +115,8 @@ const ChatPage = () => {
   }
 
   console.log(conversations, "chat page")
+  
+  
 
   return (
     <Box position={"absolute"} p={4}

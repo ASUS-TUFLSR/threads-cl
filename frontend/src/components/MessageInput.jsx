@@ -13,29 +13,35 @@ const MessageInput = ({setMessages}) => {
   const showToast = useShowToast();
 
   const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if(!messageText) return; 
+	e.preventDefault();
 
-    try {
-      const res = await fetch("/api/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: messageText,
-          recipientId: selectedConversation.userId
-        })
-      })
-      const data = await res.json();
-      console.log(data);
-      if(data.error){
-      showToast("Error", data.error, "error");
-      return;
-      }
-      setMessages((messages) => [...messages, data]);
+	if (!messageText) return;
 
-      setConversations((prevConvs) => {
+	try {
+		const res = await fetch("/api/messages", {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				message: messageText,
+				recipientId: selectedConversation.userId,
+			}),
+		});
+
+		const data = await res.json();
+
+		if (data.error) {
+			showToast("Error", data.error, "error");
+			return;
+		}
+
+		// console.log(data);
+		setMessages((prev) => [...prev, data]);
+
+		// ← ADD THIS BACK
+		setConversations((prevConvs) => {
 				const updatedConversations = prevConvs.map((conversation) => {
 					if (conversation._id === selectedConversation._id) {
 						return {
@@ -50,13 +56,14 @@ const MessageInput = ({setMessages}) => {
 				});
 				return updatedConversations;
 			});
-			setMessageText("");
-      
-    } catch (error) {
-      showToast("Error", error.message, "error");
-    }
-  }
 
+
+setMessageText("");
+
+	} catch (error) {
+		showToast("Error", error.message, "error");
+	}
+};
   return (
     <form onSubmit={handleSendMessage} >
         <InputGroup>
