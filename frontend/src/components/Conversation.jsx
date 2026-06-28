@@ -2,7 +2,7 @@ import { Avatar, AvatarBadge, Box, Flex, Image, Stack, Text, useColorMode, useCo
 import React from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from "../atoms/userAtom";
-import {BsCheck2All} from "react-icons/bs"
+import {BsCheck2All, BsFillImageFill} from "react-icons/bs"
 import { selectedConversationAtom } from '../atoms/messageAtom';
 
 
